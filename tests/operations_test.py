@@ -54,3 +54,12 @@ if not ops.xor_op(a, b):
 else:
 	print("{}. FAIL".format(count))
 count += 1
+
+print("")
+
+print("! precedence = {}".format(ops.precedence("!")))
+print("+ precedence = {}".format(ops.precedence("+")))
+print("| precedence = {}".format(ops.precedence("|")))
+print("^ precedence = {}".format(ops.precedence("^")))
+print("=> precedence = {}".format(ops.precedence("=>")))
+print("<=> precedence = {}".format(ops.precedence("<=>")))
