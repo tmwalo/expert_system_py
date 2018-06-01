@@ -30,12 +30,12 @@ class ResolveProposition:
 		operator_stack = []
 		fact_stack = []
 		validate = Validator()
-		op_precedence = OperatorPrecedence()
+		ops = Operations()
 		for token in proposition:
 			if validate.is_fact(token):
 				fact_stack.append(facts.atoms[token])
 			else if validate.is_operator(token):
-				while ((operator_stack.count > 0) and (not validate.is_left_bracket(operator_stack[-1])) and ((op_precedence.get(operator_stack[-1]) > op_precedence.get(token)) or ((op_precedence.get(operator_stack[-1]) == op_precedence.get(token)) and (validate.is_left_associative(token))))):
+				while ((operator_stack.count > 0) and (not validate.is_left_bracket(operator_stack[-1])) and ((ops.precedence(operator_stack[-1]) > ops.precedence(token)) or ((ops.precedence(operator_stack[-1]) == ops.precedence(token)) and (validate.is_left_associative(token))))):
 					self.execute_stack_operation(operator_stack, fact_stack)
 					operator_stack.append(token)
 			else if validate.is_left_bracket(token):
