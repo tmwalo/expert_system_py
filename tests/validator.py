@@ -30,11 +30,11 @@ class Validator:
 	def is_operator(self, operator):
 		if self.is_negation(operator):
 			return True
-		else if self.is_and(operator):
+		elif self.is_and(operator):
 			return True
-		else if self.is_or(operator):
+		elif self.is_or(operator):
 			return True
-		else if self.is_xor(operator):
+		elif self.is_xor(operator):
 			return True
 		else:
 			return False
