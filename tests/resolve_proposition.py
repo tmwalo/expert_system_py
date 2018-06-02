@@ -1,28 +1,33 @@
+from validator import Validator
+from operations import Operations
+
 class ResolveProposition:
 
 	def execute_stack_operation(self, operator_stack, fact_stack):
-		if (operator_stack.count == 0) or (fact_stack.count == 0):
+		if (len(operator_stack) == 0) or (len(fact_stack) == 0):
 			return False
 		operator_value = operator_stack.pop()
 		fact = fact_stack.pop()
 		validate = Validator()
+		if (not validate.is_operator(operator_value)) or (not isinstance(fact, bool)):
+			return False
 		operation = Operations()
 		if validate.is_negation(operator_value):
-			result = operation.negate(fact)
+			result = operation.negate_op(fact)
 			fact_stack.append(result)
 			return True
-		if fact_stack.count == 0:
+		if len(fact_stack) == 0:
 			return False
 		if validate.is_and(operator_value):
 			result = operation.and_op(fact_stack.pop(), fact)
 			fact_stack.append(result)
-		else if validate.is_or(operator_value):
+		elif validate.is_or(operator_value):
 			result = operation.or_op(fact_stack.pop(), fact)
 			fact_stack.append(result)
-		else if validate.is_xor(operator_value):
+		elif validate.is_xor(operator_value):
 			result = operation.xor_op(fact_stack.pop(), fact)
 			fact_stack.append(result)
-		else
+		else:
 			return False
 		return True
 
@@ -34,21 +39,26 @@ class ResolveProposition:
 		for token in proposition:
 			if validate.is_fact(token):
 				fact_stack.append(facts.atoms[token])
-			else if validate.is_operator(token):
-				while ((operator_stack.count > 0) and (not validate.is_left_bracket(operator_stack[-1])) and ((ops.precedence(operator_stack[-1]) > ops.precedence(token)) or ((ops.precedence(operator_stack[-1]) == ops.precedence(token)) and (validate.is_left_associative(token))))):
-					self.execute_stack_operation(operator_stack, fact_stack)
-					operator_stack.append(token)
-			else if validate.is_left_bracket(token):
+			elif validate.is_operator(token):
+				while ((len(operator_stack) > 0) and (not validate.is_left_bracket(operator_stack[-1])) and ((ops.precedence(operator_stack[-1]) > ops.precedence(token)) or ((ops.precedence(operator_stack[-1]) == ops.precedence(token)) and (validate.is_left_associative(token))))):
+					if not self.execute_stack_operation(operator_stack, fact_stack):
+						raise Exception("Stack operation failed")
 				operator_stack.append(token)
-			else if validate.is_right_bracket(token):
-				while (operator_stack.count > 0) and (not validate.is_left_bracket(operator_stack[-1])):
-					self.execute_stack_operation(operator_stack, fact_stack)
-				if (operator_stack.count > 0) and (validate.is_left_bracket(operator_stack[-1])):
+			elif validate.is_left_bracket(token):
+				operator_stack.append(token)
+			elif validate.is_right_bracket(token):
+				while (len(operator_stack) > 0) and (not validate.is_left_bracket(operator_stack[-1])):
+					if not self.execute_stack_operation(operator_stack, fact_stack):
+						raise Exception("Stack operation failed")
+				if (len(operator_stack) > 0) and (validate.is_left_bracket(operator_stack[-1])):
 					operator_stack.pop()
 				else:
 					raise Exception("Left bracket missing")
-		while operator_stack.count > 0:
-			self.execute_stack_operation()
-		if fact_stack.count > 1:
+			else:
+				raise Exception("Unknown token")
+		while len(operator_stack) > 0:
+			if not self.execute_stack_operation(operator_stack, fact_stack):
+				raise Exception("Stack operation failed")
+		if len(fact_stack) > 1:
 			raise Exception("Missing operator")
 		return fact_stack.pop()
