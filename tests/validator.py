@@ -6,7 +6,7 @@
 #    By: tmwalo <marvin@42.fr>                      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2018/06/27 10:39:01 by tmwalo            #+#    #+#              #
-#    Updated: 2018/06/28 15:50:33 by tmwalo           ###   ########.fr        #
+#    Updated: 2018/06/28 16:45:57 by tmwalo           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -56,6 +56,32 @@ class Validator:
 			return False
 		else:
 			return True
+
+        def is_fact_init(self, line):
+            line = self.remove_comment(line)
+            if len(line) == 0:
+                return False
+            for index in range(len(line)):
+                if (index == 0):
+                    if (line[index] != "="):
+                        return False
+                else:
+                    if (not self.is_fact(line[index])):
+                        return False
+            return True
+
+        def is_query_init(self, line):
+            line = self.remove_comment(line)
+            if len(line) == 0:
+                return False
+            for index in range(len(line)):
+                if (index == 0):
+                    if (line[index] != "?"):
+                        return False
+                else:
+                    if (not self.is_fact(line[index])):
+                        return False
+            return True
 
         def remove_comment(self, line):
             hash_index = line.find("#")
