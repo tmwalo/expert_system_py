@@ -6,7 +6,7 @@
 #    By: tmwalo <marvin@42.fr>                      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2018/06/27 10:40:14 by tmwalo            #+#    #+#              #
-#    Updated: 2018/06/28 13:10:45 by tmwalo           ###   ########.fr        #
+#    Updated: 2018/06/28 16:52:51 by tmwalo           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -14,6 +14,29 @@ from rule import Rule
 from facts import Facts
 from validator import Validator
 from resolve_proposition import ResolveProposition
+import sys
+
+if len(sys.argv) != 2:
+    print("Error!")
+    print("Usage: expert_system input_file")
+    sys.exit(0)
+
+try:
+    input_file = open(sys.argv[1], "r")
+except IOError:
+    print("File does not exist.")
+    sys.exit(0)
+
+validate = Validator()
+
+for line in input_file:
+    line = validate.remove_comment(line)
+    if line != "":
+        line = re.split("\s+", line)
+        line = list(filter(None, line))
+#   CONTINUE FROM HERE  #
+
+input_file.close()
 
 rule1 = Rule("A => C")
 rule2 = Rule("B => D")
@@ -30,8 +53,6 @@ facts = Facts()
 
 goals = []
 goals.append("E")
-
-validate = Validator()
 
 resolver = ResolveProposition()
 
