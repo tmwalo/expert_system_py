@@ -1,3 +1,15 @@
+# **************************************************************************** #
+#                                                                              #
+#                                                         :::      ::::::::    #
+#    resolve_proposition.py                             :+:      :+:    :+:    #
+#                                                     +:+ +:+         +:+      #
+#    By: tmwalo <marvin@42.fr>                      +#+  +:+       +#+         #
+#                                                 +#+#+#+#+#+   +#+            #
+#    Created: 2018/06/27 10:38:40 by tmwalo            #+#    #+#              #
+#    Updated: 2018/06/28 10:16:35 by tmwalo           ###   ########.fr        #
+#                                                                              #
+# **************************************************************************** #
+
 from validator import Validator
 from operations import Operations
 
@@ -37,6 +49,8 @@ class ResolveProposition:
 		validate = Validator()
 		ops = Operations()
 		for token in proposition:
+                        if token == ' ':
+                            continue
 			if validate.is_fact(token):
 				fact_stack.append(facts.atoms[token])
 			elif validate.is_operator(token):

@@ -1,3 +1,15 @@
+# **************************************************************************** #
+#                                                                              #
+#                                                         :::      ::::::::    #
+#    rule.py                                            :+:      :+:    :+:    #
+#                                                     +:+ +:+         +:+      #
+#    By: tmwalo <marvin@42.fr>                      +#+  +:+       +#+         #
+#                                                 +#+#+#+#+#+   +#+            #
+#    Created: 2018/06/27 10:38:51 by tmwalo            #+#    #+#              #
+#    Updated: 2018/06/27 15:12:28 by tmwalo           ###   ########.fr        #
+#                                                                              #
+# **************************************************************************** #
+
 from validator import Validator
 
 class Rule:
@@ -12,6 +24,7 @@ class Rule:
 	def get_antecedent(self):
 		if not self.antecedent:
 			self.antecedent = (self.rule.split("=>"))[0]
+			self.antecedent = self.antecedent.strip()
 		return self.antecedent
 	
 	def get_antecedent_atoms(self):
@@ -27,6 +40,7 @@ class Rule:
 	def get_consequent(self):
 		if not self.consequent:
 			self.consequent = (self.rule.split("=>"))[1]
+			self.consequent = self.consequent.strip()
 		return self.consequent
 	
 	def get_consequent_atoms(self):
