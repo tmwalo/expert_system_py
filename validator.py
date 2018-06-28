@@ -6,7 +6,7 @@
 #    By: tmwalo <marvin@42.fr>                      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2018/06/27 10:39:01 by tmwalo            #+#    #+#              #
-#    Updated: 2018/06/27 10:39:06 by tmwalo           ###   ########.fr        #
+#    Updated: 2018/06/28 15:50:33 by tmwalo           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -56,3 +56,9 @@ class Validator:
 			return False
 		else:
 			return True
+
+        def remove_comment(self, line):
+            hash_index = line.find("#")
+            if hash_index == (-1):
+                return (line)
+            return (line[0:hash_index])

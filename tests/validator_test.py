@@ -146,3 +146,24 @@ if not validate.is_left_associative("!"):
 else:
 	print("{}. FAIL".format(count))
 count += 1
+
+line = ""
+print("empty line")
+print("line: " + line)
+print("remove comment: " + validate.remove_comment(line))
+
+line1 = "no comment"
+print("line: " + line1)
+print("remove comment: " + validate.remove_comment(line1))
+
+line2 = "#"
+print("line: " + line2)
+print("remove comment: " + validate.remove_comment(line2))
+
+line3 = "# comment only"
+print("line: " + line3)
+print("remove comment: " + validate.remove_comment(line3))
+
+line4 = "A + B => C # this part is a comment"
+print("line: " + line4)
+print("remove comment: " + validate.remove_comment(line4))
