@@ -6,7 +6,7 @@
 #    By: tmwalo <marvin@42.fr>                      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2018/06/27 10:40:14 by tmwalo            #+#    #+#              #
-#    Updated: 2018/06/27 16:39:25 by tmwalo           ###   ########.fr        #
+#    Updated: 2018/06/28 10:42:12 by tmwalo           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -35,14 +35,11 @@ validate = Validator()
 
 resolver = ResolveProposition()
 
-goals_accomplished = []
-
-def backchain(rules, facts, goals, goal_accomplished):
+def backchain(rules, facts, goals):
     goal = goals.pop()
     print("popped goal: " + goal)
     if (validate.is_fact(goal)) and ((facts.atoms)[goal] == True):
         print(goal + " is fact and is true")
-        goal_accomplished.append(True)
         return
         
     conflict_set = []
@@ -53,15 +50,29 @@ def backchain(rules, facts, goals, goal_accomplished):
             print("add to conflict set: " + rule.rule)
             conflict_set.append(rule)
     for matched_rule in conflict_set:
-        antecedent_atom_list = matched_rule.get_antecedent_atoms()
-        for atom in antecedent_atom_list:
-            if atom not in goals:
-                print("add to goals: " + atom)
-                goals.append(atom)
-        backchain(rules, facts, goals)
-    print("Return False")
-    goal_accomplished.append(False)
+        is_antecedent_true = resolver.resolve(matched_rule.get_antecedent(), facts)
+        if (is_antecedent_true and validate.is_fact(matched_rule.get_consequent())):
+            (facts.atoms)[matched_rule.get_consequent()] = True
+            return
+        else:
+            antecedent_atom_list = matched_rule.get_antecedent_atoms()
+            for atom in antecedent_atom_list:
+                if atom not in goals:
+                    print("add to goals: " + atom)
+                    goals.append(atom)
+            backchain(rules, facts, goals)
+    print("Exit backchain")
     return
 
-if (backchain(rules, facts, goals)):
-    print("Query is true")
+backchain(rules, facts, goals)
+
+print("A:")
+print((facts.atoms)["A"])
+print("B:")
+print((facts.atoms)["B"])
+print("C:")
+print((facts.atoms)["C"])
+print("D:")
+print((facts.atoms)["D"])
+print("E:")
+print((facts.atoms)["E"])
