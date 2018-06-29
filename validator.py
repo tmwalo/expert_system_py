@@ -77,7 +77,7 @@ class Validator:
 			resolver.resolve(antecedent, facts)
 			resolver.resolve(consequent, facts)
 		except:
-			sys.stderr.write("Syntax error")
+			sys.stderr.write("Syntax error\n")
 			return False
 		return True
 

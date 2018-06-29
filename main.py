@@ -24,17 +24,39 @@ if len(sys.argv) != 2:
 try:
     input_file = open(sys.argv[1], "r")
 except IOError:
-    print("File does not exist.")
+    print("Failed to read file.")
     sys.exit(0)
 
 validate = Validator()
+rule_encountered = False
+fact_init_encountered = False
+query_init_encountered = False
+check_rule = True
+check_fact_init = True
+check_query_init = True
+
+rules = []
 
 for line in input_file:
     line = validate.remove_comment(line)
     if line != "":
         line = re.split("\s+", line)
         line = list(filter(None, line))
-#   CONTINUE FROM HERE  #
+		if not line:
+			continue
+		if check_rule:
+			if validate.is_rule(line):
+				rule_encountered = True
+				rule = Rule(line)
+				rules.append(rule)
+			elif rule_encountered:
+				check_rule = False
+			else:
+				sys.stderr.write("Error - rule not found\n")
+		if check__init:
+			if validate.is_(line):
+				_encountered = True
+
 
 input_file.close()
 
