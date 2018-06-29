@@ -6,7 +6,7 @@
 #    By: tmwalo <marvin@42.fr>                      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2018/06/27 10:40:14 by tmwalo            #+#    #+#              #
-#    Updated: 2018/06/28 16:52:51 by tmwalo           ###   ########.fr        #
+#    Updated: 2018/06/29 10:38:52 by tmwalo           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -15,11 +15,27 @@ from facts import Facts
 from validator import Validator
 from resolve_proposition import ResolveProposition
 import sys
+import re
 
 if len(sys.argv) != 2:
     print("Error!")
     print("Usage: expert_system input_file")
     sys.exit(0)
+
+validate = Validator()
+rule_found = False
+fact_init_found = False
+query_init_found = False
+check_rule = True
+check_fact_init = False
+check_query_init = False
+
+rules = []
+
+facts = Facts()
+initialised_facts = []
+
+queries = []
 
 try:
     input_file = open(sys.argv[1], "r")
@@ -27,56 +43,69 @@ except IOError:
     print("Failed to read file.")
     sys.exit(0)
 
-validate = Validator()
-rule_encountered = False
-fact_init_encountered = False
-query_init_encountered = False
-check_rule = True
-check_fact_init = True
-check_query_init = True
-
-rules = []
-
 for line in input_file:
-    line = validate.remove_comment(line)
-    if line != "":
+    if (line != "\n") and (line != ""):
+        line = validate.remove_comment(line)
         line = re.split("\s+", line)
         line = list(filter(None, line))
-		if not line:
-			continue
-		if check_rule:
-			if validate.is_rule(line):
-				rule_encountered = True
-				rule = Rule(line)
-				rules.append(rule)
-			elif rule_encountered:
-				check_rule = False
-			else:
-				sys.stderr.write("Error - rule not found\n")
-		if check__init:
-			if validate.is_(line):
-				_encountered = True
-
-
+        line = " ".join(line)
+	if not line:
+	    continue
+        if (not check_rule) and (not check_fact_init) and (not check_query_init):
+            sys.stderr.write("Error - unrecognised line found\n")
+            sys.exit(0)
+        if check_rule:
+	    if validate.is_rule(line):
+		rule_found = True
+		rule = Rule(line)
+		rules.append(rule)
+	    elif rule_found:
+		check_rule = False
+                check_fact_init = True
+	    else:
+		sys.stderr.write("Error - rule not found\n")
+                sys.exit(0)
+	if check_fact_init:
+	    if validate.is_fact_init(line):
+                fact_init_found = True
+                for char in line:
+                    if char == "=":
+                        continue
+                    (facts.atoms)[char] = True
+                    initialised_facts.append(char)
+                check_fact_init = False
+                check_query_init = True
+                continue
+            else:
+		sys.stderr.write("Error - fact initialisation not found\n")
+                sys.exit(0)
+	if check_query_init:
+	    if validate.is_query_init(line):
+		query_init_found = True
+                for char in line:
+                    if char == "?":
+                        continue
+                    queries.append(char)
+                check_query_init = False
+            else:
+		sys.stderr.write("Error - query initialisation not found\n")
+                sys.exit(0)
 input_file.close()
 
-rule1 = Rule("A => C")
-rule2 = Rule("B => D")
-rule3 = Rule("C + D => E")
+print("Rules:")
+for rule in rules:
+    print(rule.rule)
+print("")
 
-rules = []
-rules.append(rule1)
-rules.append(rule2)
-rules.append(rule3)
+print("Initialised facts:")
+for fact in initialised_facts:
+    print(fact)
+print("")
 
-facts = Facts()
-(facts.atoms)["A"] = True
-(facts.atoms)["B"] = True
-
-goals = []
-goals.append("E")
-
-resolver = ResolveProposition()
+print("Queries")
+for query in queries:
+    print(query)
+print("")
 
 def backchain(rules, facts, goals):
     if (not goals):
@@ -112,17 +141,12 @@ def resolveQuery(query, facts, rules):
             (facts.atoms)[query] = True
             return
 
-backchain(rules, facts, goals)
+resolver = ResolveProposition()
 
-resolveQuery("E", facts, rules)
-
-print("A:")
-print((facts.atoms)["A"])
-print("B:")
-print((facts.atoms)["B"])
-print("C:")
-print((facts.atoms)["C"])
-print("D:")
-print((facts.atoms)["D"])
-print("E:")
-print((facts.atoms)["E"])
+for query in queries:
+    goals = []
+    goals.append(query)
+    backchain(rules, facts, goals)
+    resolveQuery(query, facts, rules)
+    print(query + ":")
+    print((facts.atoms)[query])

@@ -1,4 +1,7 @@
-Battle not with monsters
-lest ye become a monster,
-And when you gaze into the abyss,
-the abyss gazes into you
+A => C
+B => D
+C + D => E
+
+=AB
+
+?E
