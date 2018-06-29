@@ -1,12 +1,12 @@
 # **************************************************************************** #
 #                                                                              #
 #                                                         :::      ::::::::    #
-#    expert_system.py                                   :+:      :+:    :+:    #
+#    expert_system_trace.py                             :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
 #    By: tmwalo <marvin@42.fr>                      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
-#    Created: 2018/06/29 10:55:49 by tmwalo            #+#    #+#              #
-#    Updated: 2018/06/29 14:56:01 by tmwalo           ###   ########.fr        #
+#    Created: 2018/06/29 14:49:54 by tmwalo            #+#    #+#              #
+#    Updated: 2018/06/29 14:50:01 by tmwalo           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -111,24 +111,38 @@ def backchain(rules, facts, goals, query):
     if (not goals):
         goals.append(query)
         goal = query
+        print("Current goal: " + goal)
     else:
         goal = goals.pop()
+        print("Current goal: " + goal)
     if (validate.is_fact(goal)) and ((facts.atoms)[goal] == True):
+        print(goal + " is true")
         return
 
     conflict_set = []
     for rule in rules:
+        print("current rule: " + rule.rule)
         if goal in rule.get_consequent_atoms():
             conflict_set.append(rule)
+            print("Add rule to conflict set")
     for matched_rule in conflict_set:
+        print("matched rule: " + matched_rule.rule)
         is_antecedent_true = resolver.resolve(matched_rule.get_antecedent(), facts)
+        if (is_antecedent_true):
+            print("lhs of matched rule is true")
         if (is_antecedent_true and validate.is_fact(matched_rule.get_consequent())):
             (facts.atoms)[matched_rule.get_consequent()] = True
+            print("rhs set to true")
         else:
+            print("add lhs atoms to goals")
             antecedent_atom_list = matched_rule.get_antecedent_atoms()
             for atom in antecedent_atom_list:
                 if atom not in goals:
                     goals.append(atom)
+                else:
+                    print("Atom already in goal stack")
+    print("recur")
+    print("")
     backchain(rules, facts, goals, query)
     return
 
@@ -147,6 +161,7 @@ resolver = ResolveProposition()
 
 for query in queries:
     goals = []
+#    goals.append(query)
     backchain(rules, facts, goals, query)
     resolveQuery(query, facts, rules)
     print(query + ":")
