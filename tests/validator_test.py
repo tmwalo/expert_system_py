@@ -221,3 +221,29 @@ print(validate.is_query_init(line))
 line = "?ABC"
 print("is line query init: " + line)
 print(validate.is_query_init(line))
+print("")
+
+rule = ""
+print("empty line")
+print("is rule: " + rule)
+print(validate.is_rule(rule))
+
+rule1 = "not a rule"
+print("is rule: " + rule1)
+print(validate.is_rule(rule1))
+
+rule2 = "=>"
+print("is rule: " + rule2)
+print(validate.is_rule(rule2))
+
+rule3 = "lhs not rule => rhs not rule"
+print("is rule: " + rule3)
+print(validate.is_rule(rule3))
+
+rule4 = "A + B => (!C"
+print("is rule: " + rule4)
+print(validate.is_rule(rule4))
+
+rule5 = "A + B => (!C) | D"
+print("is rule: " + rule5)
+print(validate.is_rule(rule5))

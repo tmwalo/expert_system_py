@@ -10,7 +10,7 @@
 #                                                                              #
 # **************************************************************************** #
 
-from validator import Validator
+import validator
 from operations import Operations
 
 class ResolveProposition:
@@ -20,7 +20,7 @@ class ResolveProposition:
 			return False
 		operator_value = operator_stack.pop()
 		fact = fact_stack.pop()
-		validate = Validator()
+		validate = validator.Validator()
 		if (not validate.is_operator(operator_value)) or (not isinstance(fact, bool)):
 			return False
 		operation = Operations()
@@ -46,7 +46,7 @@ class ResolveProposition:
 	def resolve(self, proposition, facts):
 		operator_stack = []
 		fact_stack = []
-		validate = Validator()
+		validate = validator.Validator()
 		ops = Operations()
 		for token in proposition:
                         if token == ' ':

@@ -6,9 +6,13 @@
 #    By: tmwalo <marvin@42.fr>                      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2018/06/27 10:39:01 by tmwalo            #+#    #+#              #
-#    Updated: 2018/06/28 16:45:57 by tmwalo           ###   ########.fr        #
+#    Updated: 2018/06/28 17:12:46 by tmwalo           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
+
+import resolve_proposition
+from facts import Facts
+import sys
 
 class Validator:
 
@@ -56,6 +60,26 @@ class Validator:
 			return False
 		else:
 			return True
+
+	def is_rule(self, line):
+		hash_index = line.find("=>")
+		if hash_index == (-1):
+			return False
+		line = self.remove_comment(line)
+		split_sides = line.split("=>")
+		antecedent = split_sides[0]
+		consequent = split_sides[1]
+		if (not antecedent) or (not consequent):
+			return False
+		resolver = resolve_proposition.ResolveProposition()
+		facts = Facts()
+		try:
+			resolver.resolve(antecedent, facts)
+			resolver.resolve(consequent, facts)
+		except:
+			sys.stderr.write("Syntax error")
+			return False
+		return True
 
         def is_fact_init(self, line):
             line = self.remove_comment(line)

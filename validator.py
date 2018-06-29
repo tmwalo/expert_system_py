@@ -10,6 +10,10 @@
 #                                                                              #
 # **************************************************************************** #
 
+import resolve_proposition
+from facts import Facts
+import sys
+
 class Validator:
 
 	def is_fact(self, operator):
@@ -57,15 +61,25 @@ class Validator:
 		else:
 			return True
 
-        def is_rule(self, line):
-            hash_index = line.find("=>")
-            if hash_index == (-1):
-                return False
-            line = self.remove_comment(line)
-            split_sides = line.split("=>")
-            antecedent = split_sides[0]
-            consequent = split_sides[1]
-            #   TRY TO RESOLVE WITHOUT ERRORS    #
+	def is_rule(self, line):
+		hash_index = line.find("=>")
+		if hash_index == (-1):
+			return False
+		line = self.remove_comment(line)
+		split_sides = line.split("=>")
+		antecedent = split_sides[0]
+		consequent = split_sides[1]
+		if (not antecedent) or (not consequent):
+			return False
+		resolver = resolve_proposition.ResolveProposition()
+		facts = Facts()
+		try:
+			resolver.resolve(antecedent, facts)
+			resolver.resolve(consequent, facts)
+		except:
+			sys.stderr.write("Syntax error")
+			return False
+		return True
 
         def is_fact_init(self, line):
             line = self.remove_comment(line)
