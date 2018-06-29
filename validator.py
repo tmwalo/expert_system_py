@@ -6,7 +6,7 @@
 #    By: tmwalo <marvin@42.fr>                      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2018/06/27 10:39:01 by tmwalo            #+#    #+#              #
-#    Updated: 2018/06/29 09:38:43 by tmwalo           ###   ########.fr        #
+#    Updated: 2018/06/29 11:47:21 by tmwalo           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -77,7 +77,6 @@ class Validator:
 			resolver.resolve(antecedent, facts)
 			resolver.resolve(consequent, facts)
 		except:
-			sys.stderr.write("Syntax error\n")
 			return False
 		return True
 
