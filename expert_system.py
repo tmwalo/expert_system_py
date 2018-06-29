@@ -1,12 +1,12 @@
 # **************************************************************************** #
 #                                                                              #
 #                                                         :::      ::::::::    #
-#    main.py                                            :+:      :+:    :+:    #
+#    expert_system.py                                   :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
 #    By: tmwalo <marvin@42.fr>                      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
-#    Created: 2018/06/27 10:40:14 by tmwalo            #+#    #+#              #
-#    Updated: 2018/06/29 10:38:52 by tmwalo           ###   ########.fr        #
+#    Created: 2018/06/29 10:55:49 by tmwalo            #+#    #+#              #
+#    Updated: 2018/06/29 10:55:55 by tmwalo           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -102,7 +102,7 @@ for fact in initialised_facts:
     print(fact)
 print("")
 
-print("Queries")
+print("Queries:")
 for query in queries:
     print(query)
 print("")
