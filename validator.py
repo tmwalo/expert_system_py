@@ -6,7 +6,7 @@
 #    By: tmwalo <marvin@42.fr>                      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2018/06/27 10:39:01 by tmwalo            #+#    #+#              #
-#    Updated: 2018/06/28 17:12:46 by tmwalo           ###   ########.fr        #
+#    Updated: 2018/06/29 09:38:43 by tmwalo           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -98,6 +98,7 @@ class Validator:
             line = self.remove_comment(line)
             if len(line) == 0:
                 return False
+            fact_found = False
             for index in range(len(line)):
                 if (index == 0):
                     if (line[index] != "?"):
@@ -105,6 +106,10 @@ class Validator:
                 else:
                     if (not self.is_fact(line[index])):
                         return False
+                    else:
+                        fact_found = True
+            if (not fact_found):
+                return False
             return True
 
         def remove_comment(self, line):
