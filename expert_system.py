@@ -6,7 +6,7 @@
 #    By: tmwalo <marvin@42.fr>                      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2018/06/29 10:55:49 by tmwalo            #+#    #+#              #
-#    Updated: 2018/06/29 10:55:55 by tmwalo           ###   ########.fr        #
+#    Updated: 2018/06/29 11:06:06 by tmwalo           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -116,7 +116,7 @@ def backchain(rules, facts, goals):
 
     conflict_set = []
     for rule in rules:
-        if rule.get_consequent() == goal:
+        if goal in rule.get_consequent_atoms():
             conflict_set.append(rule)
     for matched_rule in conflict_set:
         is_antecedent_true = resolver.resolve(matched_rule.get_antecedent(), facts)
