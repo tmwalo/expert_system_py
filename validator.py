@@ -6,7 +6,7 @@
 #    By: tmwalo <marvin@42.fr>                      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2018/06/27 10:39:01 by tmwalo            #+#    #+#              #
-#    Updated: 2018/06/30 15:02:20 by tmwalo           ###   ########.fr        #
+#    Updated: 2018/06/30 16:01:11 by tmwalo           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -131,10 +131,8 @@ class Validator:
 	    if and_index == (-1):
 	        return False
             line = re.split("\+", line)
-            print("line list after split using +:")
-            for split_val in line:
-                print(split_val)
             new_line = []
+            stripped_literals = []
             for token in line:
                 new_line.append(re.split("\s+", token))
                 new_line[-1] = list(filter(None, new_line[-1]))
@@ -142,7 +140,7 @@ class Validator:
             for current_str in new_line:
                 if (not self.is_literal(current_str)):
                     return False
-            return line
+            return new_line
 
         def remove_comment(self, line):
             hash_index = line.find("#")
