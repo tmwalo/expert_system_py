@@ -6,7 +6,7 @@
 #    By: tmwalo <marvin@42.fr>                      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2018/06/27 10:39:01 by tmwalo            #+#    #+#              #
-#    Updated: 2018/06/30 14:54:06 by tmwalo           ###   ########.fr        #
+#    Updated: 2018/06/30 15:02:20 by tmwalo           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -112,10 +112,16 @@ class Validator:
                 return False
             return True
 
+        def is_negated_fact(self, token):
+            if (len(token) == 2) and (token[0] == "!") and (self.is_fact(token[1])):
+                return True
+            else:
+                return False
+
         def is_literal(self, token):
             if self.is_fact(token):
                 return True
-            elif (len(token) == 2) and (token[0] == "!") and (self.is_fact(token[1])):
+            elif self.is_negated_fact(token):
                 return True
             else:
                 return False
