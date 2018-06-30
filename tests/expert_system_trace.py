@@ -6,7 +6,7 @@
 #    By: tmwalo <marvin@42.fr>                      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2018/06/29 14:49:54 by tmwalo            #+#    #+#              #
-#    Updated: 2018/06/29 14:50:01 by tmwalo           ###   ########.fr        #
+#    Updated: 2018/06/30 11:33:52 by tmwalo           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -107,21 +107,17 @@ for query in queries:
     print(query)
 print("")
 
-def backchain(rules, facts, goals, query):
-    if (not goals):
-        goals.append(query)
-        goal = query
-        print("Current goal: " + goal)
-    else:
-        goal = goals.pop()
-        print("Current goal: " + goal)
+def backchain(rules, facts, goal):
     if (validate.is_fact(goal)) and ((facts.atoms)[goal] == True):
         print(goal + " is true")
         return
-
+    goals = []
+    goals.append(goal)
+#	print("add " + goal + " to goals stack")
     conflict_set = []
+#	print("search rhs of rules for goal")
     for rule in rules:
-        print("current rule: " + rule.rule)
+        print("curent goal: " + goal + "\ncurrent rule: " + rule.rule)
         if goal in rule.get_consequent_atoms():
             conflict_set.append(rule)
             print("Add rule to conflict set")
@@ -141,9 +137,17 @@ def backchain(rules, facts, goals, query):
                     goals.append(atom)
                 else:
                     print("Atom already in goal stack")
-    print("recur")
+#            print("recur")
+            print("")
+	    for goal in goals:
+	    	if len(goals) > 1:
+	    		backchain(rules, facts, goals.pop())
+    print("final resolve")
     print("")
-    backchain(rules, facts, goals, query)
+    for matched_rule in conflict_set:
+        is_antecedent_true = resolver.resolve(matched_rule.get_antecedent(), facts)
+        if (is_antecedent_true and validate.is_fact(matched_rule.get_consequent())):
+            (facts.atoms)[matched_rule.get_consequent()] = True
     return
 
 def resolveQuery(query, facts, rules):
@@ -160,9 +164,9 @@ def resolveQuery(query, facts, rules):
 resolver = ResolveProposition()
 
 for query in queries:
-    goals = []
-#    goals.append(query)
-    backchain(rules, facts, goals, query)
+    print("")
+    backchain(rules, facts, query)
     resolveQuery(query, facts, rules)
     print(query + ":")
     print((facts.atoms)[query])
+    print("")
