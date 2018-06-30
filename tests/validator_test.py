@@ -247,3 +247,57 @@ print(validate.is_rule(rule4))
 rule5 = "A + B => (!C) | D"
 print("is rule: " + rule5)
 print(validate.is_rule(rule5))
+print("")
+
+literal1 = ""
+print("is literal: " + literal1)
+print(validate.is_literal(literal1))
+
+literal2 = "a"
+print("is literal: " + literal2)
+print(validate.is_literal(literal2))
+
+literal3 = "!a"
+print("is literal: " + literal3)
+print(validate.is_literal(literal3))
+
+literal4 = "say what again"
+print("is literal: " + literal4)
+print(validate.is_literal(literal4))
+
+literal5 = "A"
+print("is literal: " + literal5)
+print(validate.is_literal(literal5))
+
+literal6 = "!A"
+print("is literal: " + literal6)
+print(validate.is_literal(literal6))
+
+literal7 = "! A"
+print("is literal: " + literal7)
+print(validate.is_literal(literal7))
+print("")
+
+and_conj1 = ""
+print("is conjuction of literals: " + and_conj1)
+print(validate.is_conjuction_of_literals(and_conj1))
+
+and_conj2 = "   A + B - +    C "
+print("is conjuction of literals: " + and_conj2)
+print(validate.is_conjuction_of_literals(and_conj2))
+
+and_conj3 = " one plus one is what ?    "
+print("is conjuction of literals: " + and_conj3)
+print(validate.is_conjuction_of_literals(and_conj3))
+
+and_conj4 = " A + B + C "
+print("is conjuction of literals: " + and_conj4)
+print(validate.is_conjuction_of_literals(and_conj4))
+
+and_conj5 = " A + !B + C "
+print("is conjuction of literals: " + and_conj5)
+print(validate.is_conjuction_of_literals(and_conj5))
+
+and_conj6 = "A"
+print("is conjuction of literals: " + and_conj6)
+print(validate.is_conjuction_of_literals(and_conj6))

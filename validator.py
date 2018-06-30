@@ -6,13 +6,14 @@
 #    By: tmwalo <marvin@42.fr>                      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2018/06/27 10:39:01 by tmwalo            #+#    #+#              #
-#    Updated: 2018/06/29 11:47:21 by tmwalo           ###   ########.fr        #
+#    Updated: 2018/06/30 14:54:06 by tmwalo           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 import resolve_proposition
 from facts import Facts
 import sys
+import re
 
 class Validator:
 
@@ -110,6 +111,32 @@ class Validator:
             if (not fact_found):
                 return False
             return True
+
+        def is_literal(self, token):
+            if self.is_fact(token):
+                return True
+            elif (len(token) == 2) and (token[0] == "!") and (self.is_fact(token[1])):
+                return True
+            else:
+                return False
+
+        def is_conjuction_of_literals(self, line):
+	    and_index = line.find("+")
+	    if and_index == (-1):
+	        return False
+            line = re.split("\+", line)
+            print("line list after split using +:")
+            for split_val in line:
+                print(split_val)
+            new_line = []
+            for token in line:
+                new_line.append(re.split("\s+", token))
+                new_line[-1] = list(filter(None, new_line[-1]))
+                new_line[-1] = "".join(new_line[-1])
+            for current_str in new_line:
+                if (not self.is_literal(current_str)):
+                    return False
+            return line
 
         def remove_comment(self, line):
             hash_index = line.find("#")
