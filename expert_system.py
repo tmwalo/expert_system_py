@@ -6,7 +6,7 @@
 #    By: tmwalo <marvin@42.fr>                      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2018/06/29 10:55:49 by tmwalo            #+#    #+#              #
-#    Updated: 2018/06/30 11:47:44 by tmwalo           ###   ########.fr        #
+#    Updated: 2018/06/30 11:52:03 by tmwalo           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -109,7 +109,6 @@ print("")
 
 def backchain(rules, facts, goal):
     if (validate.is_fact(goal)) and ((facts.atoms)[goal] == True):
-        print(goal + " is true")
         return
     goals = []
     goals.append(goal)
