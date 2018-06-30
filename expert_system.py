@@ -6,7 +6,7 @@
 #    By: tmwalo <marvin@42.fr>                      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2018/06/29 10:55:49 by tmwalo            #+#    #+#              #
-#    Updated: 2018/06/29 14:56:01 by tmwalo           ###   ########.fr        #
+#    Updated: 2018/06/30 11:47:44 by tmwalo           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -107,15 +107,12 @@ for query in queries:
     print(query)
 print("")
 
-def backchain(rules, facts, goals, query):
-    if (not goals):
-        goals.append(query)
-        goal = query
-    else:
-        goal = goals.pop()
+def backchain(rules, facts, goal):
     if (validate.is_fact(goal)) and ((facts.atoms)[goal] == True):
+        print(goal + " is true")
         return
-
+    goals = []
+    goals.append(goal)
     conflict_set = []
     for rule in rules:
         if goal in rule.get_consequent_atoms():
@@ -129,7 +126,13 @@ def backchain(rules, facts, goals, query):
             for atom in antecedent_atom_list:
                 if atom not in goals:
                     goals.append(atom)
-    backchain(rules, facts, goals, query)
+	    for goal in goals:
+	    	if len(goals) > 1:
+	    		backchain(rules, facts, goals.pop())
+    for matched_rule in conflict_set:
+        is_antecedent_true = resolver.resolve(matched_rule.get_antecedent(), facts)
+        if (is_antecedent_true and validate.is_fact(matched_rule.get_consequent())):
+            (facts.atoms)[matched_rule.get_consequent()] = True
     return
 
 def resolveQuery(query, facts, rules):
@@ -146,8 +149,7 @@ def resolveQuery(query, facts, rules):
 resolver = ResolveProposition()
 
 for query in queries:
-    goals = []
-    backchain(rules, facts, goals, query)
+    backchain(rules, facts, query)
     resolveQuery(query, facts, rules)
     print(query + ":")
     print((facts.atoms)[query])
