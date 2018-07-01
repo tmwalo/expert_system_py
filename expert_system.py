@@ -6,7 +6,7 @@
 #    By: tmwalo <marvin@42.fr>                      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2018/06/29 10:55:49 by tmwalo            #+#    #+#              #
-#    Updated: 2018/06/30 11:52:03 by tmwalo           ###   ########.fr        #
+#    Updated: 2018/07/01 11:44:13 by tmwalo           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -93,6 +93,16 @@ for line in input_file:
 		sys.stderr.write("Error - query initialisation not found\n")
                 sys.exit(0)
 input_file.close()
+
+if not rule_found:
+    sys.stderr.write("Error - rule not found\n")
+    sys.exit(0)
+if not fact_init_found:
+    sys.stderr.write("Error - fact init not found\n")
+    sys.exit(0)
+if not query_init_found:
+    sys.stderr.write("Error - query not found\n")
+    sys.exit(0)
 
 print("Rules:")
 for rule in rules:
