@@ -74,6 +74,7 @@ for line in input_file:
                     if char == "=":
                         continue
                     (facts.atoms)[char] = True
+                    (facts.is_set)[char] = True
                     initialised_facts.append(char)
                 check_fact_init = False
                 check_query_init = True
@@ -111,7 +112,10 @@ print("")
 
 for query in queries:
     print("")
-    backwardchain(rules, facts, query, validate, resolver)
+    try:
+    	backwardchain(rules, facts, query, validate, resolver)
+	except:
+		sys.exit(0)
     print(query + ":")
     print((facts.atoms)[query])
     print("")

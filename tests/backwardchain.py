@@ -18,8 +18,20 @@ def backwardchain(rules, facts, goal, validate, resolver):
         if (is_antecedent_true):
             print("lhs of matched rule is true")
         if (is_antecedent_true and validate.is_fact(matched_rule.get_consequent())):
+            if ((facts.atoms)[matched_rule.get_consequent()] == False) and ((facts.is_set)[matched_rule.get_consequent()] == True):
+	    	raise Exception("Contradiction found")
             (facts.atoms)[matched_rule.get_consequent()] = True
+            (facts.is_set)[matched_rule.get_consequent()] = True
             print("rhs set to true")
+        elif (is_antecedent_true and validate.is_negated_fact(matched_rule.get_consequent())):
+            if (facts.atoms)[(matched_rule.get_consequent())[1]] == True:
+	    	raise Exception("Contradiction found")
+            (facts.atoms)[(matched_rule.get_consequent())[1]] = False
+            (facts.is_set)[(matched_rule.get_consequent())[1]] = True
+            print("rhs set to true => fact set to false since negation makes rhs true")
+        elif (is_antecedent_true and validate.is_negated_fact(matched_rule.get_consequent())):
+            if (facts.atoms)[(matched_rule.get_consequent())[1]] == True:
+	    	raise Exception("Contradiction found")
         elif (is_antecedent_true and validate.is_conjuction_of_literals(matched_rule.get_consequent())):
             print("rhs is conjuction of literals")
             literals = validate.is_conjuction_of_literals(matched_rule.get_consequent())
