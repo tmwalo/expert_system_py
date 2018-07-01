@@ -112,10 +112,7 @@ print("")
 
 for query in queries:
     print("")
-    try:
-    	backwardchain(rules, facts, query, validate, resolver)
-	except:
-		sys.exit(0)
+    backwardchain(rules, facts, query, validate, resolver)
     print(query + ":")
     print((facts.atoms)[query])
     print("")
