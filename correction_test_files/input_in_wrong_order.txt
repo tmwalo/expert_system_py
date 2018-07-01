@@ -1,0 +1,10 @@
+# Fact init first
+
+=DEGH
+
+A + B => C
+D + (E + F) => A
+G + H => B
+E => F
+
+?C

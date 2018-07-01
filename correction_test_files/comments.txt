@@ -1,0 +1,16 @@
+#The Rules
+
+A + B => C
+D + (E + F) => A     # A comment
+G + H => B
+E => F               # another comment
+
+#Fact init
+
+=DEGH
+
+#The query
+
+?C
+
+#The end

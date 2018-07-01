@@ -1,0 +1,13 @@
+
+#Unknown Line
+
+A + B => C
+D + (E + F) => A
+G + H => B
+E => F
+
+=DEGH
+
+?C
+
+Another Unknown Line
