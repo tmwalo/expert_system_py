@@ -6,7 +6,7 @@
 #    By: tmwalo <marvin@42.fr>                      +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2018/06/29 14:49:54 by tmwalo            #+#    #+#              #
-#    Updated: 2018/07/01 11:44:11 by tmwalo           ###   ########.fr        #
+#    Updated: 2018/07/01 12:36:19 by tmwalo           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -122,7 +122,11 @@ print("")
 
 for query in queries:
     print("")
-    backwardchain(rules, facts, query, validate, resolver)
+    try:
+        backwardchain(rules, facts, query, validate, resolver)
+    except:
+        sys.stderr.write("Error - Contradiction found\n")
+        sys.exit(0)
     print(query + ":")
     print((facts.atoms)[query])
     print("")
