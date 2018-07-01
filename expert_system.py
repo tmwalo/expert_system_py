@@ -14,6 +14,7 @@ from rule import Rule
 from facts import Facts
 from validator import Validator
 from resolve_proposition import ResolveProposition
+from backwardchain import backwardchain
 import sys
 import re
 
@@ -23,6 +24,7 @@ if len(sys.argv) != 2:
     sys.exit(0)
 
 validate = Validator()
+resolver = ResolveProposition()
 rule_found = False
 fact_init_found = False
 query_init_found = False
@@ -107,54 +109,8 @@ for query in queries:
     print(query)
 print("")
 
-def backchain(rules, facts, goal):
-    if (validate.is_fact(goal)) and ((facts.atoms)[goal] == True):
-        return
-    goals = []
-    goals.append(goal)
-    conflict_set = []
-    for rule in rules:
-        if goal in rule.get_consequent_atoms():
-            conflict_set.append(rule)
-    for matched_rule in conflict_set:
-        is_antecedent_true = resolver.resolve(matched_rule.get_antecedent(), facts)
-        if (is_antecedent_true and validate.is_fact(matched_rule.get_consequent())):
-            (facts.atoms)[matched_rule.get_consequent()] = True
-        elif (is_antecedent_true and validate.is_conjuction_of_literals(matched_rule.get_consequent())):
-            literals = validate.is_conjuction_of_literals(matched_rule.get_consequent())
-            for literal in literals:
-                if not validate.is_negated_fact(literal):
-                    (facts.atoms)[literal] = True
-        else:
-            antecedent_atom_list = matched_rule.get_antecedent_atoms()
-            for atom in antecedent_atom_list:
-                if atom not in goals:
-                    goals.append(atom)
-	    for goal in goals:
-	    	if len(goals) > 1:
-	    		backchain(rules, facts, goals.pop())
-    for matched_rule in conflict_set:
-        is_antecedent_true = resolver.resolve(matched_rule.get_antecedent(), facts)
-        if (is_antecedent_true and validate.is_fact(matched_rule.get_consequent())):
-            (facts.atoms)[matched_rule.get_consequent()] = True
-    return
-
-def resolveQuery(query, facts, rules):
-    conflict_set = []
-    for rule in rules:
-        if rule.get_consequent() == query:
-            conflict_set.append(rule)
-    for matched_rule in conflict_set:
-        is_antecedent_true = resolver.resolve(matched_rule.get_antecedent(), facts)
-        if (is_antecedent_true):
-            (facts.atoms)[query] = True
-            return
-
-resolver = ResolveProposition()
-
 for query in queries:
-    backchain(rules, facts, query)
-    resolveQuery(query, facts, rules)
+    backwardchain(rules, facts, query, validate, resolver)
     print(query + ":")
     print((facts.atoms)[query])
     print("")
