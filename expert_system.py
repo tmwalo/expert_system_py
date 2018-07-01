@@ -120,6 +120,11 @@ def backchain(rules, facts, goal):
         is_antecedent_true = resolver.resolve(matched_rule.get_antecedent(), facts)
         if (is_antecedent_true and validate.is_fact(matched_rule.get_consequent())):
             (facts.atoms)[matched_rule.get_consequent()] = True
+        elif (is_antecedent_true and validate.is_conjuction_of_literals(matched_rule.get_consequent())):
+            literals = validate.is_conjuction_of_literals(matched_rule.get_consequent())
+            for literal in literals:
+                if not validate.is_negated_fact(literal):
+                    (facts.atoms)[literal] = True
         else:
             antecedent_atom_list = matched_rule.get_antecedent_atoms()
             for atom in antecedent_atom_list:
@@ -152,3 +157,4 @@ for query in queries:
     resolveQuery(query, facts, rules)
     print(query + ":")
     print((facts.atoms)[query])
+    print("")
